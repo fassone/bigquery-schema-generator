@@ -604,29 +604,7 @@ class SchemaGenerator:
         type string, which is a useful marker.
         """
         if isinstance(value, str):
-            if self.TIMESTAMP_MATCHER.match(value):
-                return 'TIMESTAMP'
-            elif self.DATE_MATCHER.match(value):
-                return 'DATE'
-            elif self.TIME_MATCHER.match(value):
-                return 'TIME'
-            elif not self.quoted_values_are_strings:
-                # Implement the same type inference algorithm as 'bq load' for
-                # quoted values that look like ints, floats or bools.
-                if self.INTEGER_MATCHER.match(value):
-                    if (int(value) < self.INTEGER_MIN_VALUE
-                            or self.INTEGER_MAX_VALUE < int(value)):
-                        return 'QFLOAT'  # quoted float
-                    else:
-                        return 'QINTEGER'  # quoted integer
-                elif self.FLOAT_MATCHER.match(value):
-                    return 'QFLOAT'  # quoted float
-                elif value.lower() in ['true', 'false']:
-                    return 'QBOOLEAN'  # quoted boolean
-                else:
-                    return 'STRING'
-            else:
-                return 'STRING'
+            return 'STRING'
         # Python 'bool' is a subclass of 'int' so we must check it first
         elif isinstance(value, bool):
             return 'BOOLEAN'
